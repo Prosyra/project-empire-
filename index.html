@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>PROJECT EMPIRE — Project Mirror</title>
+<style>
+:root{--gold:#d9b778;--bg:#090909;--muted:#aaa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f5f0e7;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+header{padding:24px 20px;border-bottom:1px solid #28251f;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:13px;letter-spacing:3px;font-weight:bold}.logo span{color:var(--gold)}
+.tag{font-size:10px;color:var(--gold);letter-spacing:2px}
+main{max-width:760px;margin:auto;padding:55px 22px 70px}
+.eyebrow{color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase}
+h1{font-family:Georgia,serif;font-weight:normal;font-size:clamp(42px,10vw,76px);line-height:1.02;margin:20px 0}
+h1 em{color:var(--gold);font-weight:normal}
+p{line-height:1.75;color:#b9b5ad}
+.hero{padding:15px 0 35px}
+.hero p{max-width:490px;font-size:16px}
+button{cursor:pointer;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:17px 20px;border:1px solid var(--gold);background:var(--gold);color:#100e0a;font-weight:bold}
+button:hover{filter:brightness(1.1)}
+button.secondary{background:transparent;color:var(--gold)}
+.line{height:1px;background:#29251f;margin:30px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+.tile{border:1px solid #302b22;padding:17px 13px;min-height:110px}
+.tile b{display:block;color:var(--gold);font-size:11px;letter-spacing:1px;margin-bottom:12px}
+.tile span{font-size:12px;color:#c0bbb1;line-height:1.5}
+.small{font-size:11px;color:#817c73}
+.hidden{display:none!important}
+.question{font-family:Georgia,serif;font-size:clamp(25px,6vw,38px);line-height:1.25;margin:22px 0}
+.answers{display:grid;gap:10px;margin:25px 0}
+.answer{width:100%;text-align:left;background:#11110f;color:#eee9df;border:1px solid #39342b;text-transform:none;letter-spacing:0;font-size:14px;font-weight:normal;line-height:1.5}
+.answer.selected{border-color:var(--gold);background:#211c13}
+.progress{height:2px;background:#28251f;margin:20px 0 28px}
+#bar{height:2px;background:var(--gold);width:0;transition:width .2s}
+.result-card{border:1px solid var(--gold);padding:27px 22px;margin:25px 0;background:linear-gradient(140deg,#17140f,#0b0b0b)}
+.result-card h2{font:normal clamp(32px,8vw,52px) Georgia,serif;color:var(--gold);margin:15px 0}
+.label{font-size:10px;color:#bcb5a6;letter-spacing:2px}
+.result-card p{color:#d2ccc1}
+footer{text-align:center;border-top:1px solid #29251f;padding:25px;color:#777168;font-size:10px;letter-spacing:2px}
+@media(max-width:480px){main{padding-top:38px}.grid{grid-template-columns:1fr}.tile{min-height:auto}.tag{font-size:9px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">PROJECT <span>EMPIRE</span></div>
+<div class="tag">THE IDENTITY COLLECTION · 001</div>
+</header>
+<main>
+<section id="home">
+<div class="hero">
+<div class="eyebrow">An experiment in identity</div>
+<h1>MORE THAN<br>JUST AN <em>IMAGE.</em></h1>
+<p>Who would you be in another universe? Enter Project Mirror: five choices, one unexpected reflection, and a new way to describe yourself.</p>
+<button onclick="startQuiz()">Reveal my alter ego →</button>
+<div class="small" style="margin-top:14px">5 QUESTIONS · INSTANT REVEAL · FREE TO EXPLORE</div>
+</div>
+<div class="line"></div>
+<div class="eyebrow">Inside the collection</div>
+<div class="grid">
+<div class="tile"><b>001 / MIRROR</b><span>Discover your alternate identity.</span></div>
+<div class="tile"><b>002 / CHAOS TEST</b><span>Explore the choices you make under pressure.</span></div>
+<div class="tile"><b>003 / FUTURE YOU</b><span>Imagine the person you could become.</span></div>
+</div>
+</section>
+
+<section id="quiz" class="hidden">
+<div class="eyebrow" id="count">QUESTION 01 / 05</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="question" id="question"></div>
+<div class="answers" id="answers"></div>
+<button id="next" onclick="nextQuestion()">Continue →</button>
+<button class="secondary" onclick="goHome()" style="margin-left:8px">Exit</button>
+</section>
+
+<section id="result" class="hidden">
+<div class="eyebrow">Your alternate identity has been revealed</div>
+<div class="result-card">
+<div class="label">PROJECT MIRROR · IDENTITY FILE</div>
+<div class="small" style="margin-top:24px">SUBJECT 0047</div>
+<h2 id="archetype"></h2>
+<div class="label" id="subtitle"></div>
+<div class="line"></div>
+<div class="label">YOUR CORE STRENGTH</div>
+<p id="strength"></p>
+<div class="label">YOUR SHADOW CHALLENGE</div>
+<p id="shadow"></p>
+<div class="label">YOUR NEXT MOVE</div>
+<p id="move"></p>
+<div class="line"></div>
+<div class="small">PROJECT EMPIRE · THE STORY IS YOURS TO WRITE.</div>
+</div>
+<p id="closing"></p>
+<button onclick="window.print()">Save / Print identity card</button>
+<button class="secondary" onclick="restart()" style="margin-top:10px">Discover another side ↗</button>
+<p class="small">Your answers stay in this browser session. This experience is for reflection and entertainment, not a psychological assessment.</p>
+</section>
+</main>
+<footer>PROJECT EMPIRE © 2026 · BUILT FOR THE CURIOUS</footer>
+
+<script>
+const questions=[
+{q:"A door opens to a world where nobody knows you. What do you do first?",a:["Study the world and find its hidden rules.","Walk into the unknown and follow curiosity.","Find someone who needs help or protection.","Imagine what this world could become."]},
+{q:"When everything falls apart, what is your instinct?",a:["Make a plan and regain control.","Adapt quickly and find another path.","Keep people steady and safe.","Challenge the old rules and invent a solution."]},
+{q:"Which secret power would you choose?",a:["Seeing patterns other people miss.","Moving freely between worlds.","Knowing who can be trusted.","Turning imagination into reality."]},
+{q:"What would people remember about you?",a:["Your precision and strategic mind.","Your courage and unforgettable adventures.","Your loyalty when it mattered most.","Your ideas that changed everything."]},
+{q:"Your future self sends one message. Which feels right?",a:["Build carefully. Your decisions shape the future.","Stay curious. Your world is bigger than you think.","Protect what matters, including yourself.","Think beyond what exists. Start creating."]}
+];
+const profiles=[
+{name:"THE ARCHITECT",sub:"THE STRATEGIC MIND",strength:"You look for patterns, structure and the decisions that create lasting results.",shadow:"Planning can become a hiding place when the next step requires uncertainty.",move:"Choose one meaningful goal. Make a plan, then take the first imperfect step today.",closing:"Your power is not simply seeing how things fit together. It is deciding what deserves to be built."},
+{name:"THE WAYFINDER",sub:"THE FEARLESS EXPLORER",strength:"You are drawn to discovery, change and possibilities beyond familiar boundaries.",shadow:"Chasing the next horizon can make it difficult to finish what you start.",move:"Pick one exciting direction and commit to it long enough to see what it teaches you.",closing:"Your world expands every time curiosity becomes action."},
+{name:"THE SENTINEL",sub:"THE QUIET GUARDIAN",strength:"You notice what matters to people and value trust, resilience and meaningful connections.",shadow:"Looking after everyone else can leave your own ambitions waiting.",move:"Protect one hour for a goal that belongs entirely to you.",closing:"Your strength includes the courage to care for yourself."},
+{name:"THE REALITY FORGER",sub:"THE WORLD BUILDER",strength:"You imagine alternatives, question assumptions and see opportunities to create something new.",shadow:"Big visions can stay imaginary without a small, repeatable first step.",move:"Turn one idea into a rough first version and let the real world respond.",closing:"The future is not built by imagination alone, but imagination is where it begins."}
+];
+let current=0,answers=[];
+function startQuiz(){current=0;answers=[];show("quiz");renderQuestion();window.scrollTo(0,0)}
+function show(id){["home","quiz","result"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id))}
+function renderQuestion(){
+const item=questions[current];
+document.getElementById("count").textContent=`QUESTION ${String(current+1).padStart(2,"0")} / 05`;
+document.getElementById("bar").style.width=((current+1)/questions.length*100)+"%";
+document.getElementById("question").textContent=item.q;
+const holder=document.getElementById("answers");holder.innerHTML="";
+item.a.forEach((answer,i)=>{
+const b=document.createElement("button");b.className="answer"+(answers[current]===i?" selected":"");b.textContent=String.fromCharCode(65+i)+"  —  "+answer;
+b.onclick=()=>{answers[current]=i;renderQuestion()};holder.appendChild(b);
+});
+document.getElementById("next").textContent=current===4?"Reveal my identity →":"Continue →";
+}
+function nextQuestion(){
+if(answers[current]===undefined){document.getElementById("question").textContent=questions[current].q+" Choose the answer that feels most like you.";return}
+if(current<4){current++;renderQuestion();window.scrollTo(0,0)}else reveal();
+}
+function reveal(){
+const tally=[0,0,0,0];answers.forEach(x=>tally[x]++);
+let best=0;for(let i=1;i<tally.length;i++)if(tally[i]>tally[best])best=i;
+const p=profiles[best];
+document.getElementById("archetype").textContent=p.name;
+document.getElementById("subtitle").textContent=p.sub;
+document.getElementById("strength").textContent=p.strength;
+document.getElementById("shadow").textContent=p.shadow;
+document.getElementById("move").textContent=p.move;
+document.getElementById("closing").textContent=p.closing;
+show("result");window.scrollTo(0,0);
+}
+function goHome(){show("home");window.scrollTo(0,0)}
+function restart(){startQuiz()}
+</script>
+</body>
+</html>
